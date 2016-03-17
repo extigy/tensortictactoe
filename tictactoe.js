@@ -1,13 +1,13 @@
-var bigGameState = {"turn":1,"subgame":0,
-										"board":{"g1":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g2":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g3":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g4":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g5":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g6":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g7":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g8":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
-														"g9":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0},
+var bigGameState = {"type":"","turn":0,"subgame":0,
+										"board":{"g1":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g2":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g3":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g4":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g5":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g6":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g7":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g8":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
+														"g9":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
 														}
 									 };
 //turn 0-no game, 1-x, 2-o
@@ -44,6 +44,121 @@ function setCellO(cell){
 	cell.children().removeClass("fa-times").removeClass("red");
 }
 
+
+function isWinner(subGame){
+	gameID = "g"+String(subGame);
+	if(bigGameState.board[gameID].w > 0) return bigGameState.board[gameID].w;
+	//horiz
+	if(bigGameState.board[gameID].b1 == 1 && bigGameState.board[gameID].b2 == 1 && bigGameState.board[gameID].b3 == 1) return 1;
+	if(bigGameState.board[gameID].b1 == 2 && bigGameState.board[gameID].b2 == 2 && bigGameState.board[gameID].b3 == 2) return 2;
+	if(bigGameState.board[gameID].b4 == 1 && bigGameState.board[gameID].b5 == 1 && bigGameState.board[gameID].b6 == 1) return 3;
+	if(bigGameState.board[gameID].b4 == 2 && bigGameState.board[gameID].b5 == 2 && bigGameState.board[gameID].b6 == 2) return 4;
+	if(bigGameState.board[gameID].b7 == 1 && bigGameState.board[gameID].b8 == 1 && bigGameState.board[gameID].b9 == 1) return 5;
+	if(bigGameState.board[gameID].b7 == 2 && bigGameState.board[gameID].b8 == 2 && bigGameState.board[gameID].b9 == 2) return 6;
+
+	//vert
+	if(bigGameState.board[gameID].b1 == 1 && bigGameState.board[gameID].b4 == 1 && bigGameState.board[gameID].b7 == 1) return 7;
+	if(bigGameState.board[gameID].b1 == 2 && bigGameState.board[gameID].b4 == 2 && bigGameState.board[gameID].b7 == 2) return 8;
+	if(bigGameState.board[gameID].b2 == 1 && bigGameState.board[gameID].b5 == 1 && bigGameState.board[gameID].b8 == 1) return 9;
+	if(bigGameState.board[gameID].b2 == 2 && bigGameState.board[gameID].b5 == 2 && bigGameState.board[gameID].b8 == 2) return 10;
+	if(bigGameState.board[gameID].b3 == 1 && bigGameState.board[gameID].b6 == 1 && bigGameState.board[gameID].b9 == 1) return 11;
+	if(bigGameState.board[gameID].b3 == 2 && bigGameState.board[gameID].b6 == 2 && bigGameState.board[gameID].b9 == 2) return 12;	
+
+	//diag
+	if(bigGameState.board[gameID].b1 == 1 && bigGameState.board[gameID].b5 == 1 && bigGameState.board[gameID].b9 == 1) return 13;
+	if(bigGameState.board[gameID].b1 == 2 && bigGameState.board[gameID].b5 == 2 && bigGameState.board[gameID].b9 == 2) return 14;
+	if(bigGameState.board[gameID].b3 == 1 && bigGameState.board[gameID].b5 == 1 && bigGameState.board[gameID].b7 == 1) return 15;
+	if(bigGameState.board[gameID].b3 == 2 && bigGameState.board[gameID].b5 == 2 && bigGameState.board[gameID].b7 == 2) return 16;
+
+	//no winners
+	return 0;
+}
+
+function drawWinner(subGame,winType){
+	gameID = "g"+String(subGame);
+	switch(winType){
+		case 1:
+			$('#'+gameID+"b1").css('background-color','#FFE0E0');
+			$('#'+gameID+"b2").css('background-color','#FFE0E0');
+			$('#'+gameID+"b3").css('background-color','#FFE0E0');
+			break;
+		case 2:
+			$('#'+gameID+"b1").css('background-color','#E0E0FF');
+			$('#'+gameID+"b2").css('background-color','#E0E0FF');
+			$('#'+gameID+"b3").css('background-color','#E0E0FF');
+			break;
+		case 3:
+			$('#'+gameID+"b4").css('background-color','#FFE0E0');
+			$('#'+gameID+"b5").css('background-color','#FFE0E0');
+			$('#'+gameID+"b6").css('background-color','#FFE0E0');
+			break;
+		case 4:
+			$('#'+gameID+"b4").css('background-color','#E0E0FF');
+			$('#'+gameID+"b5").css('background-color','#E0E0FF');
+			$('#'+gameID+"b6").css('background-color','#E0E0FF');
+			break;
+		case 5:
+			$('#'+gameID+"b7").css('background-color','#FFE0E0');
+			$('#'+gameID+"b8").css('background-color','#FFE0E0');
+			$('#'+gameID+"b9").css('background-color','#FFE0E0');
+			break;
+		case 6:
+			$('#'+gameID+"b7").css('background-color','#E0E0FF');
+			$('#'+gameID+"b8").css('background-color','#E0E0FF');
+			$('#'+gameID+"b9").css('background-color','#E0E0FF');
+			break;
+		case 7:
+			$('#'+gameID+"b1").css('background-color','#FFE0E0');
+			$('#'+gameID+"b4").css('background-color','#FFE0E0');
+			$('#'+gameID+"b7").css('background-color','#FFE0E0');
+			break;
+		case 8:
+			$('#'+gameID+"b1").css('background-color','#E0E0FF');
+			$('#'+gameID+"b4").css('background-color','#E0E0FF');
+			$('#'+gameID+"b7").css('background-color','#E0E0FF');
+			break;
+		case 9:
+			$('#'+gameID+"b2").css('background-color','#FFE0E0');
+			$('#'+gameID+"b5").css('background-color','#FFE0E0');
+			$('#'+gameID+"b8").css('background-color','#FFE0E0');
+			break;
+		case 10:
+			$('#'+gameID+"b2").css('background-color','#E0E0FF');
+			$('#'+gameID+"b5").css('background-color','#E0E0FF');
+			$('#'+gameID+"b8").css('background-color','#E0E0FF');
+			break;
+		case 11:
+			$('#'+gameID+"b3").css('background-color','#FFE0E0');
+			$('#'+gameID+"b6").css('background-color','#FFE0E0');
+			$('#'+gameID+"b9").css('background-color','#FFE0E0');
+			break;
+		case 12:
+			$('#'+gameID+"b3").css('background-color','#E0E0FF');
+			$('#'+gameID+"b6").css('background-color','#E0E0FF');
+			$('#'+gameID+"b9").css('background-color','#E0E0FF');
+			break;
+		case 13:
+			$('#'+gameID+"b1").css('background-color','#FFE0E0');
+			$('#'+gameID+"b5").css('background-color','#FFE0E0');
+			$('#'+gameID+"b9").css('background-color','#FFE0E0');
+			break;
+		case 14:
+			$('#'+gameID+"b1").css('background-color','#E0E0FF');
+			$('#'+gameID+"b5").css('background-color','#E0E0FF');
+			$('#'+gameID+"b9").css('background-color','#E0E0FF');
+			break;
+		case 15:
+			$('#'+gameID+"b3").css('background-color','#FFE0E0');
+			$('#'+gameID+"b5").css('background-color','#FFE0E0');
+			$('#'+gameID+"b7").css('background-color','#FFE0E0');
+			break;
+		case 16:
+			$('#'+gameID+"b3").css('background-color','#E0E0FF');
+			$('#'+gameID+"b5").css('background-color','#E0E0FF');
+			$('#'+gameID+"b7").css('background-color','#E0E0FF');
+			break;
+	}
+}
 
 
 function displayBoard(){
@@ -117,6 +232,13 @@ function playinCell2P(cell){
 	//update cell
 	showCell(cell);
 
+	//check for winners
+	isw = isWinner(g);
+	if(isw){
+		bigGameState.board[gameID].w = isw;
+		drawWinner(g,isw);
+	}
+
 	//switch turn
 	if (bigGameState.turn == 1){
 		bigGameState.turn = 2;
@@ -124,8 +246,15 @@ function playinCell2P(cell){
 		bigGameState.turn = 1;
 	}
 
+	//check if current subgame if full
+	if(isSubgameFull(g)){
+		$('#g'+g).css('background-color','#EFEFEF');
+	} else {
+		$('#g'+g).css('background-color','#FFFFFF');
+	}
+
 	//check target subgame isnt full - if not set it as subgame
-	$('#g'+g).css('background-color','#FFFFFF');
+	
 	if(isSubgameFull(b)){
 		bigGameState.subgame = 0;
 	} else {
@@ -138,6 +267,10 @@ function playinCell2P(cell){
 
 }
 
+function playinCell1P(cell){
+	//DO AI STUFF
+}
+
 function handleMouseDownInnerCell(cell){
 	//check game is on
 	if(bigGameState.turn == 0) return;
@@ -147,12 +280,24 @@ function handleMouseDownInnerCell(cell){
 	boxID  = "b"+cell.attr('id').charAt(3);
 	if(bigGameState.board[gameID][boxID] > 0) return;
 
-	//should play symbol?
-	if(bigGameState.subgame == 0){
-		playinCell2P(cell);
-	} else {
-		if(cell.attr('id').charAt(1) == bigGameState.subgame) playinCell2P(cell);
+	//check type of game!
+
+	if(bigGameState.type == "2P"){
+		//should play symbol?
+		if(bigGameState.subgame == 0){
+			playinCell2P(cell);
+		} else {
+			if(cell.attr('id').charAt(1) == bigGameState.subgame) playinCell2P(cell);
+		}
+	} else if(bigGameState.type == "1P"){
+		//should play symbol?
+		if(bigGameState.subgame == 0){
+			playinCell1P(cell);
+		} else {
+			if(cell.attr('id').charAt(1) == bigGameState.subgame) playinCell1P(cell);
+		}
 	}
+	
 
 }
 
@@ -167,6 +312,13 @@ $(document).ready(function()
 
 	$('.inner-cell').on('mousedown', function() {
 		handleMouseDownInnerCell($(this));
+	});
+
+	$('#go2P').on('mousedown', function() {
+		bigGameState.type = "2P";
+		bigGameState.turn = 1;
+		$("#startscreen").css("display","none");
+		$("#gamescreen").css("display","inline");
 	});
 
 	displayBoard();

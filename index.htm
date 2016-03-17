@@ -26,11 +26,12 @@
         color: #222222;
       }
       h1 {
-        opacity: 1;
-        font-size: 1em;
+        line-height: 1;
+        font-weight: 300;
+        font-size: 5vw;
       }
       a {
-        color: #00e;
+        color: #333;
         text-decoration: none;
       }
       a:visited {
@@ -136,7 +137,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div id="gamescreen" style="display:none;" class="row">
       <div class="square">
         <div class="grid3x3">
 
@@ -489,7 +490,19 @@
         </div>
       </div>
   </div>
-  <div class="row"></div>
+  <div id="startscreen" class="row"><h1>
+    <a id = "go1P" href="javascript:void(0)">
+      <i class="fa fa-user"></i>
+      <i class="fa fa-laptop"></i>
+    </a>
+    &nbsp;or&nbsp;
+    <a id = "go2P" href="javascript:void(0)">
+      <i class="fa fa-user"></i>
+      <i class="fa fa-user"></i>
+    </a>
+    </h1>
+  </div>
+
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="tictactoe.js"></script>
   </body>
