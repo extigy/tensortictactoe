@@ -268,7 +268,35 @@ function playinCell2P(cell){
 }
 
 function playinCell1P(cell){
-	//DO AI STUFF
+	//place human move
+	playinCell2P(cell);
+
+
+	//DO AI STUFF - place computer move
+	
+	/*iters = 0
+	//randomness
+	targetSubgame = bigGameState.subgame;
+	if(targetSubgame == 0){
+		targetSubgame = Math.floor(Math.random()*9) + 1;
+		while(isSubgameFull(targetSubgame) && iters < 1000){
+			targetSubgame = Math.floor(Math.random()*9) + 1;
+			iters++;
+		}
+	}
+	gameID = "g"+ String(targetSubgame);
+	boxID  = "b"+ String(Math.floor(Math.random()*9) + 1);
+	//make sure random is empty
+	while(bigGameState.board[gameID][boxID] > 0 && iters < 1000) {
+		boxID  = "b"+ String(Math.floor(Math.random()*9) + 1);
+		iters++;
+	}
+	cellAI = $('#'+gameID+boxID);
+	*/
+
+
+
+	playinCell2P(cellAI);
 }
 
 function handleMouseDownInnerCell(cell){
@@ -316,6 +344,13 @@ $(document).ready(function()
 
 	$('#go2P').on('mousedown', function() {
 		bigGameState.type = "2P";
+		bigGameState.turn = 1;
+		$("#startscreen").css("display","none");
+		$("#gamescreen").css("display","inline");
+	});
+
+	$('#go1P').on('mousedown', function() {
+		bigGameState.type = "1P";
 		bigGameState.turn = 1;
 		$("#startscreen").css("display","none");
 		$("#gamescreen").css("display","inline");
