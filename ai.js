@@ -85,18 +85,19 @@ function isFinishedWgameState(gameState){
 
 function score(turn,gameState){
 	isf = isFinishedWgameState(gameState);
-	if (isf == 17) return 0;
-	if (!isf) return 0;
+	drawScore = getNumberOfWinsScore(gameState,turn);
+	if (isf == 17) return drawScore;
+	if (!isf) return drawScore;
 
   if (turn == 1){
- 		if(isf%2 == 1) return 10;
- 		if(isf%2 == 0) return -10;
+ 		if(isf%2 == 1) return 100;
+ 		if(isf%2 == 0) return -100;
   } else if (turn == 2){
- 		if(isf%2 == 1) return -10;
- 		if(isf%2 == 0) return 10;
+ 		if(isf%2 == 1) return -100;
+ 		if(isf%2 == 0) return 100;
   }
 
-  return 0;
+  return drawScore;
 }
 
 function getAvailableMoves(gameState){
