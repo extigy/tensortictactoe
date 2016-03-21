@@ -186,70 +186,29 @@ function makePossibleMove(gameState,moveID){
 	return gameStateNew;
 }
 
-var depth = 0;
-function minimaxscores(turn,gameState){
-	
-	if(depth > 1000) {
-		//console.log("Depth limit reached")
-		//if (gameState.turn == turn){
-	  	return getNumberOfWinsScore(gameState,turn);
-		//} else {
-		//	return -(getNumberOfWinsScore(gameState,turn));
-		//}
-	} else {
-		depth++;
-	}
+function minimax(turn,gameState,depth){
+	if(depth > 2) return getNumberOfWinsScore(gameState,turn);
+	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
+	var scores = new Array();
+	var moves = new Array();
 
-  if (isFinishedWgameState(gameState) > 0){
-  	//console.log("game ends with score "+String(score(turn,gameState)));
-  	return score(turn,gameState);
-  }
-  var scores = new Array();
-  var moves = new Array();
-  var availMoves = getAvailableMoves(gameState);
-  shuffle(availMoves);
-  for(var i=0; i<availMoves.length; i++){
+	var availMoves = getAvailableMoves(gameState);
+	shuffle(availMoves);
+
+	for(var i=0; i<availMoves.length; i++){
 		var possibleGame = makePossibleMove(gameState,availMoves[i]);
-		var ns = minimaxscores(turn,possibleGame);
+		var ns = minimax(turn,possibleGame,depth+1);
 		scores.push(ns);
 		moves.push(availMoves[i]);
-		//if we find a 10 we can't do any better so let's break.
-		if (gameState.turn == turn){
-	    if(ns == 10) break;
-		} else {
-			if(ns == -10) break;
-		}
-  }
-	if (gameState.turn == turn){
-    maxScoreIndex = scores.indexOf(Math.max.apply(null,scores));
-    return scores[maxScoreIndex];
-	} else {
-		minScoreIndex = scores.indexOf(Math.min.apply(null,scores));
-    return scores[minScoreIndex];
 	}
-}
-
-
-function minimax(turn,gameState){
-  if (isFinishedWgameState(gameState) > 0) return score(turn,gameState); 
-  var scores = new Array();
-  var moves = new Array();
-  availMoves = getAvailableMoves(gameState);
-  shuffle(availMoves);
-  for(var i=0; i<availMoves.length; i++){
-		var possibleGame = makePossibleMove(gameState,availMoves[i]);
-		depth = 0;
-		scores.push(minimaxscores(turn,possibleGame));
-		moves.push(availMoves[i]);
-  }
-  console.log(scores)
+	console.log(scores)
 	if (gameState.turn == turn){
-    maxScoreIndex = scores.indexOf(Math.max.apply(null,scores));
-    choice = moves[maxScoreIndex];
-    return choice;
+		maxScoreIndex = scores.indexOf(Math.max.apply(null,scores));
+		if(depth == 0) return moves[maxScoreIndex]
+		return scores[maxScoreIndex];
 	} else {
 		minScoreIndex = scores.indexOf(Math.min.apply(null,scores));
-    choice = moves[minScoreIndex];
-    return choice;
+		if(depth == 0) return moves[minScoreIndex]
+		return scores[minScoreIndex];
 	}
 }

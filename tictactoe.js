@@ -296,30 +296,7 @@ function playinCell1P(cell){
 	//place human move
 	playinCell2P(cell);
 
-
-	//DO AI STUFF - place computer move
-	/*
-	iters = 0
-	//randomness
-	targetSubgame = bigGameState.subgame;
-	if(targetSubgame == 0){
-		targetSubgame = Math.floor(Math.random()*9) + 1;
-		while(isSubgameFull(targetSubgame) && iters < 1000){
-			targetSubgame = Math.floor(Math.random()*9) + 1;
-			iters++;
-		}
-	}
-	gameID = "g"+ String(targetSubgame);
-	boxID  = "b"+ String(Math.floor(Math.random()*9) + 1);
-	//make sure random is empty
-	while(bigGameState.board[gameID][boxID] > 0 && iters < 1000) {
-		boxID  = "b"+ String(Math.floor(Math.random()*9) + 1);
-		iters++;
-	}
-	cellAI = $('#'+gameID+boxID);
-	playinCell2P(cellAI);
-	*/
-
+	//check for end of game
 	idf = isFinished();
 	if(idf){
 		//console.log(idf)
@@ -327,7 +304,8 @@ function playinCell1P(cell){
 		hideSmallGames();
 	}
 
-	moveID = minimax(bigGameState.turn,bigGameState);
+	//DO AI STUFF - place computer move
+	moveID = minimax(bigGameState.turn,bigGameState,0);
 	if(String(moveID).charAt(0) == 'g'){
 		g = moveID.charAt(1);
 		b = moveID.charAt(3);
@@ -336,7 +314,6 @@ function playinCell1P(cell){
 		cellAI = $('#'+gameID+boxID);
 		playinCell2P(cellAI);
 	}
-
 }
 
 function hideSmallGames(){
