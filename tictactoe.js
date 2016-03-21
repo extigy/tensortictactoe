@@ -74,6 +74,58 @@ function isWinner(subGame){
 	return 0;
 }
 
+function isFinished(){
+
+	//horiz
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g2.w > 0 && bigGameState.board.g3.w > 0)
+	if(bigGameState.board.g1.w%2 == 1 && bigGameState.board.g2.w%2 == 1 && bigGameState.board.g3.w%2 == 1) return 1;
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g2.w > 0 && bigGameState.board.g3.w > 0)
+	if(bigGameState.board.g1.w%2 == 0 && bigGameState.board.g2.w%2 == 0 && bigGameState.board.g3.w%2 == 0) return 2;
+	if(bigGameState.board.g4.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g6.w > 0)
+	if(bigGameState.board.g4.w%2 == 1 && bigGameState.board.g5.w%2 == 1 && bigGameState.board.g6.w%2 == 1) return 3;
+	if(bigGameState.board.g4.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g6.w > 0)
+	if(bigGameState.board.g4.w%2 == 0 && bigGameState.board.g5.w%2 == 0 && bigGameState.board.g6.w%2 == 0) return 4;
+	if(bigGameState.board.g7.w > 0 && bigGameState.board.g8.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g7.w%2 == 1 && bigGameState.board.g8.w%2 == 1 && bigGameState.board.g9.w%2 == 1) return 5;
+	if(bigGameState.board.g7.w > 0 && bigGameState.board.g8.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g7.w%2 == 0 && bigGameState.board.g8.w%2 == 0 && bigGameState.board.g9.w%2 == 0) return 6;
+
+	
+	//vert
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g4.w > 0 && bigGameState.board.g7.w > 0)
+	if(bigGameState.board.g1.w%2 == 1 && bigGameState.board.g4.w%2 == 1 && bigGameState.board.g7.w%2 == 1) return 7;
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g4.w > 0 && bigGameState.board.g7.w > 0)
+	if(bigGameState.board.g1.w%2 == 0 && bigGameState.board.g4.w%2 == 0 && bigGameState.board.g7.w%2 == 0) return 8;
+	if(bigGameState.board.g2.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g8.w > 0)
+	if(bigGameState.board.g2.w%2 == 1 && bigGameState.board.g5.w%2 == 1 && bigGameState.board.g8.w%2 == 1) return 9;
+	if(bigGameState.board.g2.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g8.w > 0)
+	if(bigGameState.board.g2.w%2 == 0 && bigGameState.board.g5.w%2 == 0 && bigGameState.board.g8.w%2 == 0) return 10;
+	if(bigGameState.board.g3.w > 0 && bigGameState.board.g6.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g3.w%2 == 1 && bigGameState.board.g6.w%2 == 1 && bigGameState.board.g9.w%2 == 1) return 11;
+	if(bigGameState.board.g3.w > 0 && bigGameState.board.g6.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g3.w%2 == 0 && bigGameState.board.g6.w%2 == 0 && bigGameState.board.g9.w%2 == 0) return 12;	
+
+	
+	//diag
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g1.w%2 == 1 && bigGameState.board.g5.w%2 == 1 && bigGameState.board.g9.w%2 == 1) return 13;
+	if(bigGameState.board.g1.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g9.w > 0)
+	if(bigGameState.board.g1.w%2 == 0 && bigGameState.board.g5.w%2 == 0 && bigGameState.board.g9.w%2 == 0) return 14;
+	if(bigGameState.board.g3.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g7.w > 0)
+	if(bigGameState.board.g3.w%2 == 1 && bigGameState.board.g5.w%2 == 1 && bigGameState.board.g7.w%2 == 1) return 15;
+	if(bigGameState.board.g3.w > 0 && bigGameState.board.g5.w > 0 && bigGameState.board.g7.w > 0)
+	if(bigGameState.board.g3.w%2 == 0 && bigGameState.board.g5.w%2 == 0 && bigGameState.board.g7.w%2 == 0) return 16;
+
+	//draw through a full game
+	full = 0;
+	for (i = 1; i <= 9; i++) {
+		if (isSubgameFull(i)) full++;
+	}
+	if(full == 9) return 17;
+	//no winners
+	return 0;
+}
+
 function drawWinner(subGame,winType){
 	gameID = "g"+String(subGame);
 	switch(winType){
@@ -183,36 +235,9 @@ function displayBoard(){
 	}
 }
 
-function handleMouseOnInnerCell(cell){
-	//check game is on
-	if(bigGameState.turn == 0) return;
-
-	//check box isn't filled already
-	gameID = "g"+cell.attr('id').charAt(1);
-	boxID  = "b"+cell.attr('id').charAt(3);
-	if(bigGameState.board[gameID][boxID] > 0) return;
-
-	//should show ghost symbol?
-	if(bigGameState.subgame == 0){
-		showGhostonCell(cell);
-	} else {
-		if(cell.attr('id').charAt(1) == bigGameState.subgame) showGhostonCell(cell);
-	}
-}
-
-function handleMouseOffInnerCell(cell){
-	//check game is on
-	if(window.bigGameState.turn == 0) return;
-
-	//check box isn't filled already
-	gameID = "g"+cell.attr('id').charAt(1);
-	boxID  = "b"+cell.attr('id').charAt(3);
-	if(bigGameState.board[gameID][boxID] > 0) return;
-
-	hideCell(cell)
-}
 
 function isSubgameFull(game){
+	if(game == 0) return 1;
 	for (j = 1; j <= 9; j++) {
 		gameID = "g"+game;
 		boxID  = "b"+String(j);
@@ -232,7 +257,7 @@ function playinCell2P(cell){
 	//update cell
 	showCell(cell);
 
-	//check for winners
+	//check for subwinners
 	isw = isWinner(g);
 	if(isw){
 		bigGameState.board[gameID].w = isw;
@@ -273,8 +298,8 @@ function playinCell1P(cell){
 
 
 	//DO AI STUFF - place computer move
-	
-	/*iters = 0
+	/*
+	iters = 0
 	//randomness
 	targetSubgame = bigGameState.subgame;
 	if(targetSubgame == 0){
@@ -292,11 +317,77 @@ function playinCell1P(cell){
 		iters++;
 	}
 	cellAI = $('#'+gameID+boxID);
+	playinCell2P(cellAI);
 	*/
 
+	idf = isFinished();
+	if(idf){
+		//console.log(idf)
+		bigGameState.turn = 0;
+		hideSmallGames();
+	}
+
+	moveID = minimax(bigGameState.turn,bigGameState);
+	if(String(moveID).charAt(0) == 'g'){
+		g = moveID.charAt(1);
+		b = moveID.charAt(3);
+		gameID = "g"+g;
+		boxID  = "b"+b;
+		cellAI = $('#'+gameID+boxID);
+		playinCell2P(cellAI);
+	}
+
+}
+
+function hideSmallGames(){
+	for (i = 1; i <= 9; i++) {
+		$("#g"+String(i)).css("display","none");
+		bigsign = $("#f"+String(i));
+		bigsign.css("display","inline");
+		if(bigGameState.board["g"+String(i)].w == 0){
+				bigsign.children().removeClass("fa-circle-o").removeClass("blue");
+				bigsign.children().removeClass("fa-times").removeClass("red");
+				bigsign.children().addClass("fa-square").addClass("clear");
+		} else if (bigGameState.board["g"+String(i)].w%2 == 1){
+				bigsign.children().removeClass("fa-circle-o").removeClass("blue");
+				bigsign.children().removeClass("fa-times").removeClass("red");
+				bigsign.children().addClass("fa-times").addClass("red");
+		} else if (bigGameState.board["g"+String(i)].w%2 == 0){
+				bigsign.children().removeClass("fa-circle-o").removeClass("blue");
+				bigsign.children().removeClass("fa-times").removeClass("red");
+				bigsign.children().addClass("fa-circle-o").addClass("blue");
+		}
+	}
+}
+
+function handleMouseOnInnerCell(cell){
+	//check game is on
+	if(bigGameState.turn == 0) return;
+
+	//check box isn't filled already
+	gameID = "g"+cell.attr('id').charAt(1);
+	boxID  = "b"+cell.attr('id').charAt(3);
+	if(bigGameState.board[gameID][boxID] > 0) return;
+
+	//should show ghost symbol?
+	if(bigGameState.subgame == 0){
+		showGhostonCell(cell);
+	} else {
+		if(cell.attr('id').charAt(1) == bigGameState.subgame) showGhostonCell(cell);
+	}
+}
 
 
-	playinCell2P(cellAI);
+function handleMouseOffInnerCell(cell){
+	//check game is on
+	if(window.bigGameState.turn == 0) return;
+
+	//check box isn't filled already
+	gameID = "g"+cell.attr('id').charAt(1);
+	boxID  = "b"+cell.attr('id').charAt(3);
+	if(bigGameState.board[gameID][boxID] > 0) return;
+
+	hideCell(cell)
 }
 
 function handleMouseDownInnerCell(cell){
@@ -326,6 +417,13 @@ function handleMouseDownInnerCell(cell){
 		}
 	}
 	
+	//check if the game is over
+	idf = isFinished();
+	if(idf){
+		//console.log(idf)
+		bigGameState.turn = 0;
+		hideSmallGames();
+	}
 
 }
 
