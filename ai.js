@@ -190,11 +190,11 @@ function minimaxscores(turn,gameState){
 	
 	if(depth > 1000) {
 		//console.log("Depth limit reached")
-		if (gameState.turn == turn){
+		//if (gameState.turn == turn){
 	  	return getNumberOfWinsScore(gameState,turn);
-		} else {
-			return -(getNumberOfWinsScore(gameState,turn));
-		}
+		//} else {
+		//	return -(getNumberOfWinsScore(gameState,turn));
+		//}
 	} else {
 		depth++;
 	}
