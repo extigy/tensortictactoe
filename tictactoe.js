@@ -306,6 +306,7 @@ function playinCell1P(cell){
 
 	//DO AI STUFF - place computer move
 	moveID = minimax(bigGameState.turn,bigGameState,0);
+	//moveID = alphaBeta(bigGameState.turn,bigGameState,0, -1000000, 1000000);
 	if(String(moveID).charAt(0) == 'g'){
 		g = moveID.charAt(1);
 		b = moveID.charAt(3);

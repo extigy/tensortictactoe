@@ -25,10 +25,10 @@ function getNumberOfWinsScore(gameState,turn){
 		if (turn == 1){
 	 		if(isw%2 == 1) wins++;
 	 		if(isw%2 == 0) wins--;
-	  } else if (turn == 2){
+		} else if (turn == 2){
 	 		if(isw%2 == 1) wins--;
 	 		if(isw%2 == 0) wins++;
-	  }
+	 	}
 	}
 
 	return wins;
@@ -89,13 +89,13 @@ function score(turn,gameState){
 	if (isf == 17) return drawScore;
 	if (!isf) return drawScore;
 
-  if (turn == 1){
- 		if(isf%2 == 1) return 100;
- 		if(isf%2 == 0) return -100;
-  } else if (turn == 2){
- 		if(isf%2 == 1) return -100;
- 		if(isf%2 == 0) return 100;
-  }
+	if (turn == 1){
+	 	if(isf%2 == 1) return 100;
+		if(isf%2 == 0) return -100;
+	} else if (turn == 2){
+	 	if(isf%2 == 1) return -100;
+	 	if(isf%2 == 0) return 100;
+	}
 
   return drawScore;
 }
@@ -187,7 +187,7 @@ function makePossibleMove(gameState,moveID){
 }
 
 function minimax(turn,gameState,depth){
-	if(depth > 2) return getNumberOfWinsScore(gameState,turn);
+	if(depth > 3) return getNumberOfWinsScore(gameState,turn);
 	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
 	var scores = new Array();
 	var moves = new Array();
@@ -211,4 +211,41 @@ function minimax(turn,gameState,depth){
 		if(depth == 0) return moves[minScoreIndex]
 		return scores[minScoreIndex];
 	}
+}
+
+function alphaBeta(turn, gameState, depth, alpha, beta){
+	var bestValue;
+	var bestMove;
+	if(depth > 8){
+		//console.log("Max depth hit");
+		return getNumberOfWinsScore(gameState,turn);
+	}
+	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
+	var availMoves = getAvailableMoves(gameState);
+	shuffle(availMoves);
+	if (gameState.turn == turn){ //if we want to maximise
+		bestValue = alpha;
+		for(var i=0; i<availMoves.length; i++){
+			var possibleGame = makePossibleMove(gameState,availMoves[i]);
+			var childValue = alphaBeta(turn,possibleGame,depth+1, bestValue, beta);
+            bestValue = Math.max(bestValue, childValue);
+            bestMove = availMoves[i];
+			if (beta <= bestValue || bestValue == 100) {
+                break;
+            }
+        }
+    } else {
+		bestValue = beta;
+		for(var i=0; i<availMoves.length; i++){
+			var possibleGame = makePossibleMove(gameState,availMoves[i]);
+			var childValue = alphaBeta(turn,possibleGame,depth+1, alpha, bestValue);
+            bestValue = Math.min(bestValue, childValue);
+            bestMove = availMoves[i];
+            if (bestValue <= alpha || bestValue == -100) {
+                break;
+            }
+        }
+    }
+    if(depth == 0) return bestMove;
+    return bestValue;
 }
