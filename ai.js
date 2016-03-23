@@ -204,7 +204,8 @@ function makePossibleMove(gameState,moveID){
 var depthMax;
 function minimax(turn,gameState,depth){
 	if(depth == 0) {
-		depthMax = Math.round(3+(81-freeSquaresWgameState(gameState))/15);
+		depthMax = 3+Math.round(17*Math.exp(-0.05*freeSquaresWgameState(gameState)));
+		//depthMax = Math.round(3+(81-freeSquaresWgameState(gameState))/15);
 		console.log("Depthmax: "+depthMax)
 	}
   if(depth > depthMax) return getNumberOfWinsScoreDepth(turn,gameState,depth);
@@ -237,50 +238,17 @@ function minimax(turn,gameState,depth){
 	}
 }
 
-onmessage = function(e) {
-  var workerResult = minimax(e.data[0],e.data[1],e.data[2]);
-  postMessage([workerResult,e.data[0]]);
-}
-
-/*
-function alphaBeta(turn, gameState, depth, alpha, beta){
-	var bestValue;
-	var bestMove;
-	if(depth > 5){
-		//console.log("Max depth hit");
-		return getNumberOfWinsScoreDepth(turn,gameState,depth)
-	}
-	if (isFinishedWgameState(gameState) > 0){
-		return score(turn,gameState);
-	}
+function random(turn,gameState){
 	var availMoves = getAvailableMoves(gameState);
 	shuffle(availMoves);
-	if (gameState.turn == turn){ //if we want to maximise
-		bestValue = alpha;
-		for(var i=0; i<availMoves.length; i++){
-			var possibleGame = makePossibleMove(gameState,availMoves[i]);
-			var childValue = alphaBeta(turn,possibleGame,depth+1, bestValue, beta);
-            bestValue = Math.max(bestValue, childValue);
-            bestMove = availMoves[i];
-			if (beta <= bestValue) {
-                break;
-            }
-        }
-    } else {
-		bestValue = beta;
-		for(var i=0; i<availMoves.length; i++){
-			var possibleGame = makePossibleMove(gameState,availMoves[i]);
-			var childValue = alphaBeta(turn,possibleGame,depth+1, alpha, bestValue);
-            bestValue = Math.min(bestValue, childValue);
-            bestMove = availMoves[i];
-            if (bestValue <= alpha) {
-                break;
-            }
-        }
-    }
-    if(depth == 0){
-    	console.log(bestValue)
-    	return bestMove;
-    }
-    return bestValue;
-}*/
+	return availMoves[0];
+}
+
+onmessage = function(e) {
+	var workerResult;
+	//if(e.data[0] == 1)
+	workerResult = minimax(e.data[0],e.data[1],e.data[2]);
+	//if(e.data[0] == 2) workerResult = random(e.data[0],e.data[1]);
+	//if(e.data[0] == 2) workerResult = alphaBeta(e.data[0],e.data[1],e.data[2],-1000,1000);
+  postMessage([workerResult,e.data[0]]);
+}
