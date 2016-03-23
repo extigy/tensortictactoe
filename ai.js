@@ -17,21 +17,24 @@ function shuffle(array) {
   return array;
 }
 
-function getNumberOfWinsScore(gameState,turn){
+function getNumberOfWinsScore(turn,gameState){
 	var wins = 0;
 	for (i = 1; i <= 9; i++) {
 		isw = isWinnerWgameState(gameState,String(i));
 		if (isw == 0) continue;
 		if (turn == 1){
-	 		if(isw%2 == 1) wins++;
-	 		if(isw%2 == 0) wins--;
+		 	if(isw%2 == 1) wins = wins + 10;
+		 	if(isw%2 == 0) wins = wins - 10;
 		} else if (turn == 2){
-	 		if(isw%2 == 1) wins--;
-	 		if(isw%2 == 0) wins++;
-	 	}
+		 	if(isw%2 == 0) wins = wins + 10;
+		 	if(isw%2 == 1) wins = wins - 10;		 	
+		}
 	}
-
 	return wins;
+}
+function getNumberOfWinsScoreDepth(turn,gameState,depth){
+	var wins = getNumberOfWinsScore(turn,gameState);
+	return wins-depth;
 }
 
 function isFinishedWgameState(gameState){
@@ -85,16 +88,16 @@ function isFinishedWgameState(gameState){
 
 function score(turn,gameState){
 	isf = isFinishedWgameState(gameState);
-	drawScore = getNumberOfWinsScore(gameState,turn);
+	drawScore = getNumberOfWinsScore(turn,gameState);
 	if (isf == 17) return drawScore;
 	if (!isf) return drawScore;
 
 	if (turn == 1){
-	 	if(isf%2 == 1) return 100;
-		if(isf%2 == 0) return -100;
+	 	if(isf%2 == 1) return 1000;
+		if(isf%2 == 0) return -1000;
 	} else if (turn == 2){
-	 	if(isf%2 == 1) return -100;
-	 	if(isf%2 == 0) return 100;
+	 	if(isf%2 == 1) return -1000;
+	 	if(isf%2 == 0) return 1000;
 	}
 
   return drawScore;
@@ -187,7 +190,7 @@ function makePossibleMove(gameState,moveID){
 }
 
 function minimax(turn,gameState,depth){
-	if(depth > 3) return getNumberOfWinsScore(gameState,turn);
+	if(depth > 4) return getNumberOfWinsScoreDepth(turn,gameState,depth);
 	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
 	var scores = new Array();
 	var moves = new Array();
@@ -201,26 +204,41 @@ function minimax(turn,gameState,depth){
 		scores.push(ns);
 		moves.push(availMoves[i]);
 	}
-	console.log(scores)
 	if (gameState.turn == turn){
 		maxScoreIndex = scores.indexOf(Math.max.apply(null,scores));
-		if(depth == 0) return moves[maxScoreIndex]
+		if(depth == 0){
+			console.log(scores)
+			return moves[maxScoreIndex]
+		}
 		return scores[maxScoreIndex];
 	} else {
 		minScoreIndex = scores.indexOf(Math.min.apply(null,scores));
-		if(depth == 0) return moves[minScoreIndex]
+		if(depth == 0){
+			console.log(scores)
+			return moves[minScoreIndex]
+		}
 		return scores[minScoreIndex];
 	}
 }
 
+onmessage = function(e) {
+  console.log('Message received from main script');
+  var workerResult = minimax(e.data[0],e.data[1],e.data[2]);
+  console.log('Posting message back to main script');
+  postMessage([workerResult,e.data[0]]);
+}
+
+/*
 function alphaBeta(turn, gameState, depth, alpha, beta){
 	var bestValue;
 	var bestMove;
-	if(depth > 8){
+	if(depth > 5){
 		//console.log("Max depth hit");
-		return getNumberOfWinsScore(gameState,turn);
+		return getNumberOfWinsScoreDepth(turn,gameState,depth)
 	}
-	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
+	if (isFinishedWgameState(gameState) > 0){
+		return score(turn,gameState);
+	}
 	var availMoves = getAvailableMoves(gameState);
 	shuffle(availMoves);
 	if (gameState.turn == turn){ //if we want to maximise
@@ -230,7 +248,7 @@ function alphaBeta(turn, gameState, depth, alpha, beta){
 			var childValue = alphaBeta(turn,possibleGame,depth+1, bestValue, beta);
             bestValue = Math.max(bestValue, childValue);
             bestMove = availMoves[i];
-			if (beta <= bestValue || bestValue == 100) {
+			if (beta <= bestValue) {
                 break;
             }
         }
@@ -241,11 +259,14 @@ function alphaBeta(turn, gameState, depth, alpha, beta){
 			var childValue = alphaBeta(turn,possibleGame,depth+1, alpha, bestValue);
             bestValue = Math.min(bestValue, childValue);
             bestMove = availMoves[i];
-            if (bestValue <= alpha || bestValue == -100) {
+            if (bestValue <= alpha) {
                 break;
             }
         }
     }
-    if(depth == 0) return bestMove;
+    if(depth == 0){
+    	console.log(bestValue)
+    	return bestMove;
+    }
     return bestValue;
-}
+}*/

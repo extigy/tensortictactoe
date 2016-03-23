@@ -10,9 +10,10 @@ var bigGameState = {"type":"","turn":0,"subgame":0,
 														"g9":{"b1":0,"b2":0,"b3":0,"b4":0,"b5":0,"b6":0,"b7":0,"b8":0,"b9":0,"w":0},
 														}
 									 };
+var spinner;
+var AIWorker = new Worker("ai.js");
 //turn 0-no game, 1-x, 2-o
 //subgame 0-any, 1-g1, 2-g2,...
-
 
 function showCell(cell){
 	if(bigGameState.turn == 1) {
@@ -304,10 +305,26 @@ function playinCell1P(cell){
 		hideSmallGames();
 	}
 
+	spinner.spin();
+	document.getElementById('body').appendChild(spinner.el);
 	//DO AI STUFF - place computer move
-	moveID = minimax(bigGameState.turn,bigGameState,0);
-	//moveID = alphaBeta(bigGameState.turn,bigGameState,0, -1000000, 1000000);
-	if(String(moveID).charAt(0) == 'g'){
+	//moveID = minimax(bigGameState.turn,bigGameState,0);
+	//moveID = alphaBeta(bigGameState.turn,bigGameState,0, -10000, 10000);
+
+	//send off a request for computation
+	AIWorker.postMessage([bigGameState.turn,bigGameState,0]);
+	$("#gamescreen").css("opacity",0.1);
+	bigGameState.turn = 0;
+}
+
+//handle playinCell1P reply!
+AIWorker.onmessage = function(e) {
+  console.log('Message received from worker');
+  $("#gamescreen").css("opacity",1);
+  moveID = e.data[0];
+  bigGameState.turn = e.data[1];
+
+  if(String(moveID).charAt(0) == 'g'){
 		g = moveID.charAt(1);
 		b = moveID.charAt(3);
 		gameID = "g"+g;
@@ -315,6 +332,7 @@ function playinCell1P(cell){
 		cellAI = $('#'+gameID+boxID);
 		playinCell2P(cellAI);
 	}
+	spinner.stop();
 }
 
 function hideSmallGames(){
@@ -433,5 +451,7 @@ $(document).ready(function()
 	});
 
 	displayBoard();
+	var opts = {top: '50%',text: 'Thinking...',scale:2,left: '50%' };
+	spinner = new Spinner(opts).spin();
 });
 
