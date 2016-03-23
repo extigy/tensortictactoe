@@ -316,9 +316,24 @@ function playinCell1P(cell){
 	bigGameState.turn = 0;
 }
 
+function play0P(){
+	//check for end of game
+	idf = isFinished();
+	if(idf){
+		//console.log(idf)
+		bigGameState.turn = 0;
+		bigGameState.type = "";
+		hideSmallGames();
+		return;
+	}
+	spinner.spin();
+	document.getElementById('body').appendChild(spinner.el);
+	AIWorker.postMessage([bigGameState.turn,bigGameState,0]);
+	bigGameState.turn = 0;
+}
+
 //handle playinCell1P reply!
 AIWorker.onmessage = function(e) {
-  console.log('Message received from worker');
   moveID = e.data[0];
   bigGameState.turn = e.data[1];
 
@@ -331,6 +346,9 @@ AIWorker.onmessage = function(e) {
 		playinCell2P(cellAI);
 	}
 	spinner.stop();
+	if(bigGameState.type == "0P"){
+		play0P();
+	}
 }
 
 function hideSmallGames(){
@@ -446,6 +464,14 @@ $(document).ready(function()
 		bigGameState.turn = 1;
 		$("#startscreen").css("display","none");
 		$("#gamescreen").css("display","inline");
+	});
+
+	$('#go0P').on('mousedown', function() {
+		bigGameState.type = "0P";
+		bigGameState.turn = 1;
+		$("#startscreen").css("display","none");
+		$("#gamescreen").css("display","inline");
+		play0P();
 	});
 
 	displayBoard();

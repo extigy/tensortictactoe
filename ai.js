@@ -159,6 +159,18 @@ function isSubgameFullWgameState(gameState,game){
 	return 1;	
 }
 
+function freeSquaresWgameState(gameState){
+	var free = 0;
+	for (i = 1; i <= 9; i++) {
+		for (j = 1; j <= 9; j++) {
+			gameID = "g"+String(i);
+			boxID  = "b"+String(j);
+			if(gameState.board[gameID][boxID] == 0) free++;
+		}
+	}
+	return free;	
+}
+
 
 function makePossibleMove(gameState,moveID){
 	g = moveID.charAt(1);
@@ -189,12 +201,16 @@ function makePossibleMove(gameState,moveID){
 	return gameStateNew;
 }
 
+var depthMax;
 function minimax(turn,gameState,depth){
-	if(depth > 4) return getNumberOfWinsScoreDepth(turn,gameState,depth);
+	if(depth == 0) {
+		depthMax = Math.round(3+(81-freeSquaresWgameState(gameState))/15);
+		console.log("Depthmax: "+depthMax)
+	}
+  if(depth > depthMax) return getNumberOfWinsScoreDepth(turn,gameState,depth);
 	if (isFinishedWgameState(gameState) > 0) return score(turn,gameState);
 	var scores = new Array();
 	var moves = new Array();
-
 	var availMoves = getAvailableMoves(gameState);
 	shuffle(availMoves);
 
@@ -222,9 +238,7 @@ function minimax(turn,gameState,depth){
 }
 
 onmessage = function(e) {
-  console.log('Message received from main script');
   var workerResult = minimax(e.data[0],e.data[1],e.data[2]);
-  console.log('Posting message back to main script');
   postMessage([workerResult,e.data[0]]);
 }
 
