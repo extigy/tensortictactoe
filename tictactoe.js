@@ -313,14 +313,12 @@ function playinCell1P(cell){
 
 	//send off a request for computation
 	AIWorker.postMessage([bigGameState.turn,bigGameState,0]);
-	$("#gamescreen").css("opacity",0.1);
 	bigGameState.turn = 0;
 }
 
 //handle playinCell1P reply!
 AIWorker.onmessage = function(e) {
   console.log('Message received from worker');
-  $("#gamescreen").css("opacity",1);
   moveID = e.data[0];
   bigGameState.turn = e.data[1];
 
@@ -451,7 +449,7 @@ $(document).ready(function()
 	});
 
 	displayBoard();
-	var opts = {top: '50%',text: 'Thinking...',scale:2,left: '50%' };
+	var opts = {top: '5%',text: 'Thinking...',scale:1,left: '10%' };
 	spinner = new Spinner(opts).spin();
 });
 
