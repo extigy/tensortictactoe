@@ -346,6 +346,13 @@ AIWorker.onmessage = function(e) {
 		playinCell2P(cellAI);
 	}
 	spinner.stop();
+	//check if the game is over
+	idf = isFinished();
+	if(idf){
+		//console.log(idf)
+		bigGameState.turn = 0;
+		hideSmallGames();
+	}
 	if(bigGameState.type == "0P"){
 		play0P();
 	}
